@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "ru.inferna.music.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MinecraftClientMixin",
+    "SourceMixin",
+    "SoundSystemMixin",
+    "SoundManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

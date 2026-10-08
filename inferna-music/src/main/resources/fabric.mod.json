@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "infmusic",
+  "version": "${version}",
+  "name": "infmusic",
+  "description": "Client-side online music player",
+  "authors": ["Inferna"],
+  "license": "MIT",
+  "environment": "client",
+  "mixins": [
+    "inferna_music.mixins.json"
+  ],
+  "entrypoints": {
+    "client": [
+      "ru.inferna.music.InfernaMusicClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "fabric-api": "*",
+    "minecraft": "1.21.11",
+    "java": ">=21"
+  }
+}
