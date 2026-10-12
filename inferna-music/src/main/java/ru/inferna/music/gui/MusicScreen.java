@@ -66,10 +66,12 @@ public final class MusicScreen extends Screen {
                      int mainX, int mainW, int searchY, int heroY, int listY, int listBottom,
                      int cx, int volX, int volY) {
         int u(int v) { return Math.max(1, Math.round(v * unit / 100f)); }
-        int playX() { return cx - 29; }  int playY() { return footY + 6; }
-        int previousX() { return cx - 62; }
-        int nextX() { return cx + 38; }
-        int stopX() { return cx + 66; }  int stopY() { return footY + 10; }
+        // Центрируем контролы: Previous(22) + gap(5) + Play(26) + gap(5) + Next(22) + gap(8) + Stop(18) = 106px total
+        // Центр группы: cx - 106/2 = cx - 53
+        int previousX() { return cx - 53; }
+        int playX() { return cx - 53 + 22 + 5; }  int playY() { return footY + 6; }
+        int nextX() { return cx - 53 + 22 + 5 + 26 + 5; }
+        int stopX() { return cx - 53 + 22 + 5 + 26 + 5 + 22 + 8; }  int stopY() { return footY + 10; }
         int barX()  { return cx - 110; } int barY()  { return footY + 40; }
         int barW() { return 220; }
         int searchBtnX() { return mainX + mainW - 56; }
@@ -254,16 +256,26 @@ public final class MusicScreen extends Screen {
             rrect(g, bx, by, button, button, 10, playable ? (hover ? ACCENT_A : TRACK_BG) : 0x14FFFFFF);
             if (playable) {
                 boolean current = sameTrack(t, InfernaMusicClient.PLAYER.currentTrack());
-                drawText(current && InfernaMusicClient.PLAYER.isPlaying() ? "⏸" : "▶", bx + 5, by + 5, TEXT, false);
+                String icon = current && InfernaMusicClient.PLAYER.isPlaying() ? "⏸" : "▶";
+                int iconW = textRenderer.getWidth(icon);
+                int iconX = bx + (button - iconW) / 2;
+                int iconY = by + (button - 9) / 2;
+                drawText(icon, iconX, iconY, TEXT, false);
             }
-            else drawText("×", bx + 7, by + 6, MUTED);
+            else {
+                int iconW = textRenderer.getWidth("×");
+                int iconX = bx + (button - iconW) / 2;
+                drawText("×", iconX, by + 6, MUTED);
+            }
 
             int likeX = x + w - 49, likeY = ry + 8;
             boolean liked = isLiked(t);
             boolean likeHover = inside(mx, my, likeX, likeY, 16, 18) && my >= y && my <= l.listBottom;
             if (likeHover) rrect(g, likeX - 1, likeY - 1, 18, 20, 6, HOVER);
-            drawText(liked ? "\u2665" : "\u2661",
-                    likeX + 3, likeY + 3, liked ? 0xFFFF6B9D : playable ? MUTED : 0x66777777);
+            String likeIcon = liked ? "\u2665" : "\u2661";
+            int likeIconW = textRenderer.getWidth(likeIcon);
+            int likeIconX = likeX + (16 - likeIconW) / 2;
+            drawText(likeIcon, likeIconX, likeY + 3, liked ? 0xFFFF6B9D : playable ? MUTED : 0x66777777);
         }
         g.disableScissor();
     }
