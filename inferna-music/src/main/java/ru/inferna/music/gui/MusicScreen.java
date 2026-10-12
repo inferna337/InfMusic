@@ -175,7 +175,8 @@ public final class MusicScreen extends Screen {
         drawText(shown, l.mainX + 14, l.searchY + 8, search.isEmpty() ? MUTED : TEXT);
 
         boolean hover = inside(mx, my, l.searchBtnX(), l.searchBtnY(), btnW, btnH);
-        glBegin(); glGradientRRect(l.searchBtnX(), l.searchBtnY(), btnW, btnH, l.u(12), hover ? brighten(ACCENT_A) : ACCENT_A, hover ? brighten(ACCENT_B) : ACCENT_B); glEnd();
+        int searchBtnColor = hover ? 0xFF3A3A3A : 0xFF262626;  // Серый полупрозрачный, светлее при hover
+        glBegin(); glRRect(l.searchBtnX(), l.searchBtnY(), btnW, btnH, l.u(12), searchBtnColor); glEnd();
         drawText("SEARCH", l.searchBtnX() + (btnW - textRenderer.getWidth("SEARCH")) / 2, l.searchBtnY() + 4, TEXT);
     }
 
