@@ -66,10 +66,10 @@ public final class MusicScreen extends Screen {
                      int mainX, int mainW, int searchY, int heroY, int listY, int listBottom,
                      int cx, int volX, int volY) {
         int u(int v) { return Math.max(1, Math.round(v * unit / 100f)); }
-        int playX() { return cx - 30; }  int playY() { return footY + 6; }
-        int previousX() { return cx - 64; }
-        int nextX() { return cx + 38; }
-        int stopX() { return cx + 4; }  int stopY() { return footY + 9; }
+        int playX() { return cx - 36; }  int playY() { return footY + 3; }
+        int previousX() { return cx - 70; }
+        int nextX() { return cx + 46; }
+        int stopX() { return cx + 8; }  int stopY() { return footY + 9; }
         int barX()  { return cx - 110; } int barY()  { return footY + 40; }
         int barW() { return 220; }
         int searchBtnX() { return mainX + mainW - 56; }
@@ -305,16 +305,32 @@ public final class MusicScreen extends Screen {
             drawText("Nothing playing", ix, l.footY + 22, MUTED);
         }
 
+        // previous button
+        int navButtonSize = 24;
+        boolean hPrev = inside(mx, my, l.previousX(), l.footY + 9, navButtonSize, navButtonSize);
+        rrect(g, l.previousX(), l.footY + 9, navButtonSize, navButtonSize, navButtonSize / 2, hPrev ? 0x40FFFFFF : 0x26FFFFFF);
+        iconPrevious(g, l.previousX() + navButtonSize / 2, l.footY + 9 + navButtonSize / 2, 8, TEXT);
+
         // play/pause
-        int playSize = 26, stopSize = 20;
+        int playSize = 32, stopSize = 20;
         boolean hp = inside(mx, my, l.playX(), l.playY(), playSize, playSize);
         rrect(g, l.playX(), l.playY(), playSize, playSize, playSize / 2, hp ? 0xFFFFFFFF : 0xFFE9E4FF);
         int pcx = l.playX() + playSize / 2, pcy = l.playY() + playSize / 2;
         if (playing) {
-            glBegin(); glQuad(pcx - 4, pcy - 5, 3, 10, 0xFF120F20); glQuad(pcx + 1, pcy - 5, 3, 10, 0xFF120F20); glEnd();
+            // pause icon - two vertical bars
+            glBegin();
+            glQuad(pcx - 5, pcy - 6, 3, 12, 0xFF120F20);
+            glQuad(pcx + 2, pcy - 6, 3, 12, 0xFF120F20);
+            glEnd();
         } else {
-            iconPlay(g, pcx, pcy, 10, 0xFF120F20);
+            iconPlay(g, pcx + 1, pcy, 11, 0xFF120F20);
         }
+
+        // next button
+        boolean hNext = inside(mx, my, l.nextX(), l.footY + 9, navButtonSize, navButtonSize);
+        rrect(g, l.nextX(), l.footY + 9, navButtonSize, navButtonSize, navButtonSize / 2, hNext ? 0x40FFFFFF : 0x26FFFFFF);
+        iconNext(g, l.nextX() + navButtonSize / 2, l.footY + 9 + navButtonSize / 2, 8, TEXT);
+
         // stop
         boolean hs = inside(mx, my, l.stopX(), l.stopY(), stopSize, stopSize);
         rrect(g, l.stopX(), l.stopY(), stopSize, stopSize, stopSize / 2, hs ? 0x40FFFFFF : TRACK_BG);
@@ -337,9 +353,6 @@ public final class MusicScreen extends Screen {
         String ts = formatSeconds(elapsed), te = formatSeconds(total);
         drawText(ts, l.barX() - 6 - textRenderer.getWidth(ts), l.barY() - 2, MUTED);
         drawText(te, l.barX() + 226, l.barY() - 2, MUTED);
-
-        drawText("⏮", l.previousX(), l.footY + 12, TEXT, false);
-        drawText("⏭", l.nextX(), l.footY + 12, TEXT, false);
 
         // громкость
         float vol = InfernaMusicClient.PLAYER.volume();
@@ -443,6 +456,29 @@ public final class MusicScreen extends Screen {
         int w = h * 3 / 4, x0 = cx - w / 3;
         for (int i = 0; i < w; i++) {
             int half = Math.round(h / 2f * (1f - i / (float) w));
+            glQuad(x0 + i, cy - half, 1, Math.max(1, half * 2), color);
+        }
+    }
+
+    private static void iconNext(DrawContext g, int cx, int cy, int h, int color) {
+        // triangle pointing right + vertical bar
+        int w = h * 3 / 5, x0 = cx - w / 2 - 2;
+        for (int i = 0; i < w; i++) {
+            int half = Math.round(h / 2f * (1f - i / (float) w));
+            glQuad(x0 + i, cy - half, 1, Math.max(1, half * 2), color);
+        }
+        // vertical bar on the right
+        glQuad(x0 + w + 2, cy - h / 2, 2, h, color);
+    }
+
+    private static void iconPrevious(DrawContext g, int cx, int cy, int h, int color) {
+        // vertical bar + triangle pointing left
+        int w = h * 3 / 5, x0 = cx - w / 2 + 2;
+        // vertical bar on the left
+        glQuad(x0 - 4, cy - h / 2, 2, h, color);
+        // triangle pointing left
+        for (int i = 0; i < w; i++) {
+            int half = Math.round(h / 2f * (i / (float) w));
             glQuad(x0 + i, cy - half, 1, Math.max(1, half * 2), color);
         }
     }
@@ -579,16 +615,16 @@ public final class MusicScreen extends Screen {
             return true;
         }
 
-        if (inside(mx, my, l.previousX() - 4, l.footY + 6, 28, 24)) {
+        if (inside(mx, my, l.previousX(), l.footY + 9, 24, 24)) {
             skipTrack(-1);
             return true;
         }
-        if (inside(mx, my, l.nextX() - 4, l.footY + 6, 28, 24)) {
+        if (inside(mx, my, l.nextX(), l.footY + 9, 24, 24)) {
             skipTrack(1);
             return true;
         }
 
-        if (inside(mx, my, l.playX(), l.playY(), 26, 26)) {
+        if (inside(mx, my, l.playX(), l.playY(), 32, 32)) {
             JamendoTrack cur = InfernaMusicClient.PLAYER.currentTrack();
             if (cur != null) {
                 if (InfernaMusicClient.PLAYER.isPlaying()) {
