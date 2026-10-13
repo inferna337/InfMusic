@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "infmusic",
   "description": "Client-side online music player",
-  "authors": ["Inferna"],
+  "authors": ["_INFERNA"],
   "license": "MIT",
   "environment": "client",
   "mixins": [

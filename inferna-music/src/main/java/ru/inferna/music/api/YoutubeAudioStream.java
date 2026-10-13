@@ -64,7 +64,7 @@ public final class YoutubeAudioStream extends InputStream {
 
             Path converted = temporaryDirectory.resolve("audio.mp3");
             Process transcoder = new ProcessBuilder(
-                    ffmpegPath,
+                    EmbeddedTools.executable(ffmpegPath, "ffmpeg"),
                     "-hide_banner",
                     "-loglevel", "error",
                     "-y",

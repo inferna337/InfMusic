@@ -16,7 +16,9 @@ Client-side online music player for Fabric 1.21.11.
 - Minecraft `1.21.11`
 - Fabric Loader and Fabric API
 - Java 21
-- `yt-dlp` and `ffmpeg` for YouTube audio
+- YouTube helper binaries are bundled for Windows and Linux x86_64; no separate
+  Python, `yt-dlp`, or `ffmpeg` installation is required on those platforms.
+- Bundled helper licenses and sources are listed in `tools/THIRD_PARTY_NOTICES.txt`.
 - Optional Jamendo and SoundCloud API credentials in
   `.minecraft/config/inferna_music.json`
 

@@ -36,6 +36,12 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
+tasks.matching { it.name == 'sourcesJar' || it.name == 'remapSourcesJar' }.configureEach {
+    exclude 'tools/**/*.exe'
+    exclude 'tools/linux-x86_64/**'
+    exclude 'tools/windows-x86_64/**'
+}
+
 java {
     withSourcesJar()
     toolchain.languageVersion = JavaLanguageVersion.of(21)

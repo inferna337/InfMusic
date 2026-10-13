@@ -5,17 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
 final class YoutubeProcess {
     private static final Logger LOGGER = LoggerFactory.getLogger("InfernaMusic/YouTube");
-    private static final String BUNDLED_TOOL = "tools/yt-dlp";
-
     private YoutubeProcess() {
     }
 
@@ -23,8 +18,8 @@ final class YoutubeProcess {
         IOException firstFailure = null;
         List<String> candidates = candidates(executable);
         if (isYoutubeExecutable(executable)) {
-            String bundled = installBundledTool();
-            if (bundled != null) candidates.add(bundled);
+            String bundled = EmbeddedTools.executable(executable, "yt-dlp");
+            if (bundled != null) candidates.add(0, bundled);
         }
 
         for (String candidate : candidates) {
@@ -83,23 +78,4 @@ final class YoutubeProcess {
         }
     }
 
-    private static String installBundledTool() {
-        Path target = FabricLoader.getInstance().getConfigDir()
-                .resolve("inferna_music")
-                .resolve("yt-dlp");
-        try {
-            Files.createDirectories(target.getParent());
-            try (InputStream input = YoutubeProcess.class.getClassLoader().getResourceAsStream(BUNDLED_TOOL)) {
-                if (input == null) return null;
-                if (!Files.exists(target) || Files.size(target) == 0) {
-                    Files.copy(input, target, StandardCopyOption.REPLACE_EXISTING);
-                }
-            }
-            target.toFile().setExecutable(true, false);
-            return target.toString();
-        } catch (IOException exception) {
-            LOGGER.warn("Unable to extract bundled yt-dlp to {}", target, exception);
-            return null;
-        }
-    }
 }
