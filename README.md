@@ -1,57 +1,26 @@
-# InfMusic
-
-Client-side online music player for Fabric 1.21.11.
-
-## English
-
-- Press `O` to open the player.
-- Search supported catalogs and play direct OGG/MP3 streams.
-- Play, pause, stop, seek, change volume, skip tracks, and manage liked tracks.
-- Audio continues while the GUI is closed.
-- Uses Minecraft's native GUI rendering through `DrawContext`.
-- Playback and network loading run asynchronously.
-
-### Requirements
-
-- Minecraft `1.21.11`
-- Fabric Loader and Fabric API
-- Java 21
-- `yt-dlp` and `ffmpeg` for YouTube audio
-- Optional Jamendo and SoundCloud API credentials in
-  `.minecraft/config/inferna_music.json`
-
-### Build
-
-```bash
-gradle build
-```
-
-The remapped JAR is written to `build/libs/`.
-
-## Русский
+# Inferna Music
 
 Клиентский онлайн-плеер музыки для Fabric 1.21.11.
 
-- Нажмите `O`, чтобы открыть плеер.
-- Ищите музыку в поддерживаемых каталогах и запускайте прямые OGG/MP3-потоки.
-- Доступны воспроизведение, пауза, остановка, перемотка, громкость, переключение треков и лайки.
-- Музыка продолжает играть после закрытия GUI.
-- Интерфейс использует обычный рендер Minecraft через `DrawContext`.
-- Сеть и загрузка аудио работают асинхронно.
+Полная документация находится в [inferna-music/README.md](inferna-music/README.md).
 
-### Требования
+## Кратко
 
-- Minecraft `1.21.11`
-- Fabric Loader и Fabric API
-- Java 21
-- `yt-dlp` и `ffmpeg` для аудио с YouTube
-- Необязательные ключи Jamendo и SoundCloud в
-  `.minecraft/config/inferna_music.json`
+- Открытие плеера клавишей `O`.
+- Поиск YouTube, Jamendo, Internet Archive, Openverse и Openwhyd.
+- Опциональная поддержка SoundCloud.
+- Прямые HTTP(S)-ссылки на MP3/OGG.
+- Воспроизведение, пауза, остановка, перемотка, громкость, плейлисты и лайки.
+- Встроенные `yt-dlp` и FFmpeg для Windows x86_64 и Linux x86_64.
+- Minecraft `1.21.11`, Fabric Loader `0.19.5+`, Fabric API и Java 21+.
 
-### Сборка
+Встроенные программы извлекаются в `.minecraft/config/inferna_music/bin/` при первом воспроизведении YouTube.
+
+## Сборка
 
 ```bash
-gradle build
+cd inferna-music
+./gradlew build
 ```
 
-Готовый remapped JAR находится в `build/libs/`.
+JAR создаётся в `inferna-music/build/libs/`.

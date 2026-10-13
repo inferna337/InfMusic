@@ -3,6 +3,7 @@
   "id": "infmusic",
   "version": "${version}",
   "name": "infmusic",
+  "icon": "assets/inferna_music/icon.png",
   "description": "Client-side online music player",
   "authors": ["_INFERNA"],
   "license": "MIT",
